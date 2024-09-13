@@ -17,11 +17,6 @@ system_prompt = """You are Squally, a social robot located in the Square buildin
 CHROMA_PATH = "chroma"
 
 load_dotenv()
-openai.api_key = os.environ['OPENAI_API_KEY']
-openai_key = os.environ['OPENAI_API_KEY']
-speech_key = os.environ['AZURE_API_KEY']
-openai_model = "gpt-4o"
-speech_region = "eastus"
 
 #prepare the databse
 embedding_function = OpenAIEmbeddings()
@@ -57,6 +52,11 @@ async def chat():
     global keyword_recognized
 
     # Load variables
+    openai.api_key = os.environ['OPENAI_API_KEY']
+    openai_key = os.environ['OPENAI_API_KEY']
+    speech_key = os.environ['AZURE_API_KEY']
+    openai_model = "gpt-4o"
+    speech_region = "eastus"
     language = "en-US"
     openai_client = OpenAI(api_key=openai_key)
 
@@ -162,6 +162,7 @@ async def speech_recognize_keyword_locally_from_microphone():
             try:
                 async with navel.Robot() as robot:
                     print("Rotating base")
+                    #This can be replaced by a source source localization method
                     await robot.rotate_base(45)
                     print("Base rotation complete")
                     time.sleep(1)
@@ -204,9 +205,12 @@ if __name__ == "__main__":
 
     try:
         with navel.Robot() as robot:
-            robot.volume = 30 #try 40
+            robot.volume = 15 #try 40
 
+            #Robot makes introduction
             robot.say("Hi everyone, this is Saint Gallen by Gerrard Richter. I would like to welcome any questions you might have!")
+            
+            #Accept 2 questions per art piece
             while count < 2:
 
                 asyncio.run(speech_recognize_keyword_locally_from_microphone())
@@ -217,10 +221,11 @@ if __name__ == "__main__":
                 count += 1
                 print(count)
             
+            #Transition to next art piece
             robot.say("We shall now move on to the next art piece")
             robot.move_base(1)
             robot.say("This is an art piece by Felix Muller. Any questions?")
-            
+                 
     except KeyboardInterrupt:
         pass
 
