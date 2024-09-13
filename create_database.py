@@ -18,7 +18,7 @@ load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
 
 CHROMA_PATH = "chroma"
-DATA_PATH = "data/books"
+DATA_PATH = "data/testing"
 
 
 def main():
@@ -47,7 +47,7 @@ def split_text(documents: list[Document]):
     chunks = text_splitter.split_documents(documents)
     print(f"Split {len(documents)} documents into {len(chunks)} chunks.")
 
-    document = chunks[10]
+    document = chunks[0] #10
     print(document.page_content)
     print(document.metadata)
 

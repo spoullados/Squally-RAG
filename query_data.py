@@ -4,6 +4,9 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
+import openai
+from dotenv import load_dotenv
+import os
 
 CHROMA_PATH = "chroma"
 
@@ -17,6 +20,9 @@ Answer the question based only on the following context:
 Answer the question based on the above context: {question}
 """
 
+#load the environment
+load_dotenv()
+openai.api_key = os.environ['OPENAI_API_KEY']
 
 def main():
     # Create CLI.
