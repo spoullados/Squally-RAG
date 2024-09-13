@@ -58,7 +58,6 @@ async def chat():
 
     # Load variables
     language = "en-US"
-
     openai_client = OpenAI(api_key=openai_key)
 
     # Set up Azure Speech Config
@@ -79,7 +78,6 @@ async def chat():
     # Loop between listening and speaking forever
     print("Starting conversation, press Ctrl+C to stop")
 
-    #messages = deque(maxlen=max_messages)
     async with navel.Robot() as robot:
 
         while True:
@@ -92,7 +90,6 @@ async def chat():
             print(f"User said: {user_speech}")
             saveInput(user_speech)
 
-            #########
             query_text = "You are currently standing next to an art piece by {art_piece}.".format(art_piece=art_piece) + user_speech            
             # Search the DB.
             results = db.similarity_search_with_relevance_scores(query_text, k=3)
@@ -108,9 +105,6 @@ async def chat():
 
             response = generate_response(openai_client, openai_model, messages)
             print(f"Response: {response}")   
-
-            #sources = [doc.metadata.get("source", None) for doc, _score in results]
-            #formatted_response = f"Response: {response}\nSources: {sources}"
 
             await robot.say(response)
                 
@@ -177,8 +171,6 @@ async def speech_recognize_keyword_locally_from_microphone():
 
             keyword_recognized = True
             stop_keyword_recognition()
-
-            #keyword_recognizer.recognize_once_async(model)
             
     def recognized_cb_wrapper(evt):
         asyncio.run_coroutine_threadsafe(recognized_cb(evt), loop)
@@ -228,19 +220,10 @@ if __name__ == "__main__":
             robot.say("We shall now move on to the next art piece")
             robot.move_base(1)
             robot.say("This is an art piece by Felix Muller. Any questions?")
-
-                # while not keyword_recognized and time.time() - start < 60:
-                #     asyncio.run(speech_recognize_keyword_locally_from_microphone())
-
-                # asyncio.run(chat()) #change to once
-                
             
     except KeyboardInterrupt:
         pass
 
-# # Run the main function
-# loop = asyncio.get_event_loop()
-# loop.run_until_complete(speech_recognize_keyword_locally_from_microphone())
 
 
 
